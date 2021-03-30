@@ -1,18 +1,48 @@
-from math import sqrt
 import matplotlib.pyplot as plt
+x = []
+y = []
+samples = 1000
 
-def rect(x):
-    if abs(x) > 1:
+
+def rect(h):
+    if abs(h) < 1:
         return 1
     return 0
 
-def hill(x, a, b):
-    new_x = a*x - b
-    if abs(new_x) > 1:
-        return sqrt(1 - new_x ** 2)
-    return 0
 
-xs = [i/250 - 2 for i in range(1000)]
+def add_hills(x, shifts):
+    list_of_ys = []
 
-plt.plot(xs, [rect(x) for x in xs])
-plt.plot(xs, [hill(x, 1, 0) for x in xs])
+    for shift in shifts:
+        list_of_ys.append(0.234 * hill(x, shift))
+
+    return sum(list_of_ys)
+
+
+def hill(x, s):
+    if -1000 * (x - s)**2 + 1 > 0:
+        return -1000 * (x - s)**2 + 1
+
+    else:
+        return 0
+
+
+shifts = []
+
+for shift in range(-100, 100):
+    shifts.append(shift/100)
+
+
+for item in range(-3 * samples, 3 * samples):
+    x.append(item/samples)
+    y.append(add_hills(item/samples, shifts))
+
+plt.plot(x, y)
+
+
+for num in range(-3 * samples, 3 * samples):
+    x.append(num/samples)
+    y.append(rect(x[-1]))
+
+plt.plot(x, y)
+plt.show()
